@@ -160,43 +160,92 @@ class Settings:
 
 settings = Settings()
 
-def prepare_disease_context(symptoms: str, disease_data: list) -> str:
-    context = ""
-    if not disease_data:
-        return "Данные о болезнях не найдены. Проверьте подключение к базе данных заболеваний."
-
-    symptoms = symptoms or ""
-    symptom_keywords = [word.lower() for word in re.findall(r'\b\w+\b', symptoms.lower())]
-
-    relevant_diseases = []
-    for disease in disease_data:
-        definition = disease.get('definition', '') or ''
-        name = disease.get('name', '') or ''
-
-        definition_words = re.findall(r'\b\w+\b', definition.lower())
-        name_words = re.findall(r'\b\w+\b', name.lower())
-
-        symptom_matches = sum(1 for keyword in symptom_keywords if keyword in definition_words or keyword in name_words)
-
-        if symptom_matches > 0:
-            relevant_diseases.append({
-                'disease': disease,
-                'relevance': symptom_matches
-            })
-
-    relevant_diseases.sort(key=lambda x: x['relevance'], reverse=True)
-    top_diseases = relevant_diseases[:5]
-
-    for item in top_diseases:
-        disease = item['disease']
-        name = disease.get('name', 'Неизвестно') or 'Неизвестно'
-        definition = disease.get('definition', 'Нет описания') or 'Нет описания'
-        context += f"Болезнь: {name}. Описание: {definition}\n"
-
-    if not context:
-        context = "Точных совпадений с базой заболеваний не найдено. Проведу общий анализ симптомов."
-
-    return context
+def prepare_disease_context(symptoms, disease_data):
+    if not symptoms or not disease_data:
+        return ""
+    
+    diseases_to_include = []
+    symptoms_lower = symptoms.lower()
+    
+    # Список распространенных русских и английских названий болезней для распознавания
+    common_disease_names = {
+        "грипп": ["грипп", "flu", "influenza"], 
+        "орви": ["орви", "простуда", "cold"],
+        "пневмония": ["пневмония", "воспаление легких", "pneumonia"],
+        "бронхит": ["бронхит", "bronchitis"],
+        "фарингит": ["фарингит", "pharyngitis"],
+        "тонзиллит": ["тонзиллит", "ангина", "tonsillitis"],
+        "лихорадка понтиак": ["понтиак", "pontiac"],
+        "легионеллез": ["легионеллез", "легионелла", "legionella", "legionnaires"],
+        "covid": ["ковид", "covid"]
+    }
+    
+    # Словарь для трансляции английских названий болезней в русские
+    disease_translations = {
+        "pontiac fever": "Лихорадка Понтиак",
+        "legionnaires": "Болезнь легионеров",
+        "pneumonia": "Пневмония",
+        "bronchitis": "Бронхит",
+        "influenza": "Грипп",
+        "common cold": "Простуда",
+        "sinusitis": "Синусит",
+        "pharyngitis": "Фарингит",
+        "tonsillitis": "Тонзиллит",
+        "covid": "COVID-19"
+    }
+    
+    # Проверяем упоминание болезней в симптомах
+    for disease_key, aliases in common_disease_names.items():
+        for alias in aliases:
+            if alias in symptoms_lower:
+                if disease_key in disease_data:
+                    diseases_to_include.append(disease_key)
+                break
+    
+    # Если не нашли упоминаний, добавляем болезни по ключевым симптомам
+    if not diseases_to_include:
+        symptom_to_disease = {
+            "горло": ["фарингит", "тонзиллит", "орви"],
+            "температура": ["грипп", "орви", "пневмония", "лихорадка понтиак"],
+            "кашель": ["бронхит", "пневмония", "орви"],
+            "насморк": ["орви", "грипп"],
+            "головная боль": ["грипп", "орви", "лихорадка понтиак"],
+            "мышечная боль": ["грипп", "лихорадка понтиак"],
+            "слабость": ["грипп", "орви", "пневмония"]
+        }
+        
+        for symptom, diseases in symptom_to_disease.items():
+            if symptom in symptoms_lower:
+                for disease in diseases:
+                    if disease in disease_data and disease not in diseases_to_include:
+                        diseases_to_include.append(disease)
+    
+    # Ограничиваем количество болезней для контекста
+    diseases_to_include = diseases_to_include[:4]
+    
+    # Если все еще нет болезней, добавляем ОРВИ и грипп как наиболее распространенные
+    if not diseases_to_include:
+        if "орви" in disease_data:
+            diseases_to_include.append("орви")
+        if "грипп" in disease_data:
+            diseases_to_include.append("грипп")
+    
+    # Формируем контекст
+    disease_context = ""
+    for disease in diseases_to_include:
+        if disease in disease_data:
+            # Проверяем, нужно ли переводить название болезни
+            disease_name = disease_data[disease].get("name", disease)
+            for eng_name, rus_name in disease_translations.items():
+                if eng_name.lower() == disease_name.lower():
+                    disease_name = rus_name
+                    break
+            
+            disease_context += f"\n### {disease_name}\n"
+            disease_context += f"Симптомы: {disease_data[disease].get('symptoms', 'Нет данных')}\n"
+            disease_context += f"Описание: {disease_data[disease].get('description', 'Нет данных')}\n"
+    
+    return disease_context
 
 def clean_output(text: str) -> str:
     if text is None:
@@ -319,3 +368,43 @@ def format_medications_for_ui(recommended_meds: List[str]) -> List[Dict]:
 async def get_recommended_medications(symptoms: str) -> List[Dict]:
     recommended_meds = await get_medication_recommendations(symptoms)
     return format_medications_for_ui(recommended_meds)
+
+
+
+def prepare_disease_context(symptoms: str, disease_data: list) -> str:
+#     context = ""
+#     if not disease_data:
+#         return "Данные о болезнях не найдены. Проверьте подключение к базе данных заболеваний."
+
+#     symptoms = symptoms or ""
+#     symptom_keywords = [word.lower() for word in re.findall(r'\b\w+\b', symptoms.lower())]
+
+#     relevant_diseases = []
+#     for disease in disease_data:
+#         definition = disease.get('definition', '') or ''
+#         name = disease.get('name', '') or ''
+
+#         definition_words = re.findall(r'\b\w+\b', definition.lower())
+#         name_words = re.findall(r'\b\w+\b', name.lower())
+
+#         symptom_matches = sum(1 for keyword in symptom_keywords if keyword in definition_words or keyword in name_words)
+
+#         if symptom_matches > 0:
+#             relevant_diseases.append({
+#                 'disease': disease,
+#                 'relevance': symptom_matches
+#             })
+
+#     relevant_diseases.sort(key=lambda x: x['relevance'], reverse=True)
+#     top_diseases = relevant_diseases[:5]
+
+#     for item in top_diseases:
+#         disease = item['disease']
+#         name = disease.get('name', 'Неизвестно') or 'Неизвестно'
+#         definition = disease.get('definition', 'Нет описания') or 'Нет описания'
+#         context += f"Болезнь: {name}. Описание: {definition}\n"
+
+#     if not context:
+#         context = "Точных совпадений с базой заболеваний не найдено. Проведу общий анализ симптомов."
+
+#     return context
