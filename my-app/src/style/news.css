@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@500;600;700&display=swap');
+
+/* Base styles */
+.medNewsContainer {
+  font-family: 'Roboto', sans-serif;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #333;
+  background-color: #f5f9ff;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(22, 100, 192, 0.08);
+}
+
+/* Header styling */
+.medNewsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  background: linear-gradient(135deg, #1664c0, #0d47a1);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(22, 100, 192, 0.2);
+}
+
+.medNewsTitleWrapper {
+  padding: 40px;
+  color: white;
+  flex: 1;
+  z-index: 2;
+}
+
+.medNewsMainTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  background: linear-gradient(90deg, #ffffff, #00e5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 10px rgba(0, 229, 255, 0.3);
+  letter-spacing: -0.5px;
+  animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.medNewsSubtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  animation: fadeIn 1s ease-out 0.3s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.medNewsModelContainer {
+  width: 300px;
+  height: 250px;
+  position: relative;
+  z-index: 1;
+  margin-right: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: glow 4s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
+  }
+}
+
+/* Category section styling */
+.medNewsCategorySection {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.medNewsCategoryTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1664c0;
+  text-align: center;
+}
+
+.medNewsCategoryButtonGroup {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.medNewsCategoryBtn {
+  background-color: #f1f7ff;
+  color: #1664c0;
+  border: 2px solid transparent;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(22, 100, 192, 0.1);
+}
+
+.medNewsCategoryBtn:hover {
+  background-color: #e1efff;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(22, 100, 192, 0.15);
+}
+
+.medNewsCategoryBtnActive {
+  background: linear-gradient(135deg, #1664c0, #0d47a1);
+  color: white;
+  border-color: #00e5ff;
+  font-weight: 600;
+  box-shadow: 0 5px 15px rgba(22, 100, 192, 0.25);
+}
+
+/* Content area styling */
+.medNewsContentArea {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.medNewsSectionHeading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: #1664c0;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.medNewsSectionHeading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #1664c0, #00e5ff);
+  border-radius: 2px;
+}
+
+/* Article grid styling */
+.medNewsArticleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.medNewsArticleCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.medNewsArticleCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(22, 100, 192, 0.15);
+}
+
+.medNewsArticleImageWrapper {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.medNewsArticleImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.medNewsArticleCard:hover .medNewsArticleImage {
+  transform: scale(1.05);
+}
+
+.medNewsArticleSource {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #1664c0, #0d47a1);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.medNewsArticleContent {
+  padding: 20px;
+}
+
+.medNewsArticleTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.medNewsArticleLink {
+  color: #0d47a1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.medNewsArticleLink:hover {
+  color: #00bcd4;
+}
+
+.medNewsArticleSummary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.medNewsArticleFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  font-size: 0.85rem;
+}
+
+.medNewsArticleTimestamp {
+  color: #777;
+  font-style: italic;
+}
+
+.medNewsReadMoreLink {
+  color: #1664c0;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.medNewsReadMoreLink::after {
+  content: "→";
+  transition: transform 0.3s ease;
+}
+
+.medNewsReadMoreLink:hover {
+  color: #00bcd4;
+}
+
+.medNewsReadMoreLink:hover::after {
+  transform: translateX(3px);
+}
+
+/* Loading and error states */
+.medNewsLoadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.medNewsSpinnerAnimation {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(22, 100, 192, 0.1);
+  border-radius: 50%;
+  border-top-color: #1664c0;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.medNewsLoadingText {
+  color: #1664c0;
+  font-weight: 500;
+}
+
+.medNewsErrorBox {
+  background-color: #fff1f0;
+  border-left: 4px solid #ff4d4f;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+.medNewsErrorMessage {
+  color: #cf1322;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.medNewsRetryButton {
+  background-color: #1664c0;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.medNewsRetryButton:hover {
+  background-color: #0d47a1;
+  box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+}
+
+.medNewsEmptyMessage {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 40px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .medNewsHeader {
+    flex-direction: column;
+  }
+  
+  .medNewsTitleWrapper {
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .medNewsMainTitle {
+    font-size: 2.2rem;
+  }
+  
+  .medNewsModelContainer {
+    width: 100%;
+    height: 200px;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  
+  .medNewsCategoryButtonGroup {
+    flex-direction: column;
+  }
+  
+  .medNewsCategoryBtn {
+    width: 100%;
+  }
+  
+  .medNewsArticleGrid {
+    grid-template-columns: 1fr;
+  }
+}
